@@ -2,20 +2,20 @@
 import asyncio
 import json
 from pathlib import Path
-from typing import List, Dict, Any, Optional
-from dataclasses import dataclass, asdict
+from typing import Any
+
 from pydantic import BaseModel
 
+from .agent.config import settings
 from .agent.graph import rag_graph
 from .agent.llm import LLMClient, create_llm_client
-from .agent.config import settings
 
 
 class EvalCase(BaseModel):
     """Single evaluation case."""
     question: str
     expected_answer: str
-    expected_sources: List[str] = []
+    expected_sources: list[str] = []
     category: str = "general"
 
 
@@ -24,7 +24,7 @@ class EvalResult(BaseModel):
     question: str
     expected: str
     actual: str
-    sources: List[Dict[str, Any]]
+    sources: list[dict[str, Any]]
     score: float
     passed: bool
     category: str
@@ -33,8 +33,8 @@ class EvalResult(BaseModel):
 
 class EvalSuite(BaseModel):
     """Complete evaluation suite results."""
-    results: List[EvalResult]
-    summary: Dict[str, Any]
+    results: list[EvalResult]
+    summary: dict[str, Any]
 
 
 JUDGE_PROMPT = """You are an expert evaluator. Compare the expected answer with the actual answer and score from 0.0 to 1.0.
@@ -61,7 +61,7 @@ Respond with JSON:
 class RAGEvaluator:
     """Evaluator for RAG system."""
     
-    def __init__(self, judge_client: Optional[LLMClient] = None):
+    def __init__(self, judge_client: LLMClient | None = None):
         self.judge_client = judge_client
     
     async def _get_judge(self) -> LLMClient:
@@ -129,7 +129,7 @@ class RAGEvaluator:
             judge_reasoning=judge_data.get("reasoning", ""),
         )
     
-    async def evaluate_suite(self, cases: List[EvalCase]) -> EvalSuite:
+    async def evaluate_suite(self, cases: list[EvalCase]) -> EvalSuite:
         """Evaluate multiple cases."""
         results = []
         for case in cases:
@@ -189,7 +189,7 @@ DEFAULT_EVAL_CASES = [
 ]
 
 
-async def run_evals(cases: Optional[List[EvalCase]] = None, output_path: Optional[str] = None) -> EvalSuite:
+async def run_evals(cases: list[EvalCase] | None = None, output_path: str | None = None) -> EvalSuite:
     """Run evaluation suite."""
     cases = cases or DEFAULT_EVAL_CASES
     evaluator = RAGEvaluator()
@@ -202,7 +202,7 @@ async def run_evals(cases: Optional[List[EvalCase]] = None, output_path: Optiona
             json.dump(suite.model_dump(), f, indent=2)
         print(f"Results saved to {output_path}")
     
-    print(f"\n=== EVAL SUMMARY ===")
+    print("\n=== EVAL SUMMARY ===")
     print(f"Total: {suite.summary['total']}")
     print(f"Passed: {suite.summary['passed']}")
     print(f"Pass Rate: {suite.summary['pass_rate']:.1%}")

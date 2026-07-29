@@ -1,5 +1,4 @@
 """Test the agent configuration."""
-import pytest
 from src.agent.config import settings
 
 

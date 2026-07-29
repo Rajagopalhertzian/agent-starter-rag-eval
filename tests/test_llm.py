@@ -1,6 +1,7 @@
 """Test LLM clients."""
 import pytest
-from src.agent.llm import OpenAICompatibleClient, EmbeddingsClient
+
+from src.agent.llm import EmbeddingsClient, OpenAICompatibleClient
 
 
 @pytest.mark.asyncio

@@ -1,22 +1,23 @@
 """RAG StateGraph using LangGraph."""
-from typing import List, Dict, Any, TypedDict, Optional
-from langgraph.graph import StateGraph, END
+from typing import Any, TypedDict
+
 from langchain_chroma import Chroma
 from langchain_core.documents import Document
 from langchain_core.embeddings import Embeddings
 from langchain_core.retrievers import BaseRetriever
+from langgraph.graph import END, StateGraph
 
-from .llm import OpenAICompatibleClient, EmbeddingsClient
 from .config import settings
+from .llm import EmbeddingsClient, OpenAICompatibleClient
 
 
 class RAGState(TypedDict):
     """State for RAG graph."""
     question: str
-    context: List[Document]
+    context: list[Document]
     answer: str
-    sources: List[Dict[str, Any]]
-    error: Optional[str]
+    sources: list[dict[str, Any]]
+    error: str | None
 
 
 class OllamaEmbeddings(Embeddings):
@@ -25,11 +26,11 @@ class OllamaEmbeddings(Embeddings):
     def __init__(self, client: EmbeddingsClient):
         self.client = client
     
-    def embed_documents(self, texts: List[str]) -> List[List[float]]:
+    def embed_documents(self, texts: list[str]) -> list[list[float]]:
         import asyncio
         return asyncio.run(self.client.embed(texts))
     
-    def embed_query(self, text: str) -> List[float]:
+    def embed_query(self, text: str) -> list[float]:
         import asyncio
         return asyncio.run(self.client.embed([text]))[0]
 

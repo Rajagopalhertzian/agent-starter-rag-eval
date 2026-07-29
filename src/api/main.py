@@ -1,14 +1,14 @@
 """FastAPI application for RAG agent."""
 from contextlib import asynccontextmanager
-from typing import List, Optional
+
+import uvicorn
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
-import uvicorn
 
+from .agent.config import settings
 from .agent.graph import rag_graph
 from .agent.ingest import ingest_pipeline
-from .agent.config import settings
 
 
 class QueryRequest(BaseModel):
@@ -17,15 +17,15 @@ class QueryRequest(BaseModel):
 
 class SourceResponse(BaseModel):
     source: str
-    page: Optional[int] = None
+    page: int | None = None
     content_preview: str
 
 
 class QueryResponse(BaseModel):
     question: str
     answer: str
-    sources: List[SourceResponse]
-    error: Optional[str] = None
+    sources: list[SourceResponse]
+    error: str | None = None
 
 
 class IngestResponse(BaseModel):

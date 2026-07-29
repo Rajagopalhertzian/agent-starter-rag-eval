@@ -1,13 +1,13 @@
 """Document ingestion pipeline."""
-import os
 from pathlib import Path
-from typing import List, Dict, Any
+from typing import Any
+
 from langchain_chroma import Chroma
 from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
-from .llm import EmbeddingsClient
 from .config import settings
+from .llm import EmbeddingsClient
 
 
 class OllamaEmbeddings:
@@ -16,16 +16,16 @@ class OllamaEmbeddings:
     def __init__(self, client: EmbeddingsClient):
         self.client = client
     
-    def embed_documents(self, texts: List[str]) -> List[List[float]]:
+    def embed_documents(self, texts: list[str]) -> list[list[float]]:
         import asyncio
         return asyncio.run(self.client.embed(texts))
     
-    def embed_query(self, text: str) -> List[float]:
+    def embed_query(self, text: str) -> list[float]:
         import asyncio
         return asyncio.run(self.client.embed([text]))[0]
 
 
-def load_documents(data_dir: str = "./data/documents") -> List[Document]:
+def load_documents(data_dir: str = "./data/documents") -> list[Document]:
     """Load documents from directory."""
     docs = []
     path = Path(data_dir)
@@ -56,7 +56,7 @@ def load_documents(data_dir: str = "./data/documents") -> List[Document]:
     return docs
 
 
-def chunk_documents(docs: List[Document], chunk_size: int = 1000, chunk_overlap: int = 200) -> List[Document]:
+def chunk_documents(docs: list[Document], chunk_size: int = 1000, chunk_overlap: int = 200) -> list[Document]:
     """Split documents into chunks."""
     splitter = RecursiveCharacterTextSplitter(
         chunk_size=chunk_size,
@@ -66,7 +66,7 @@ def chunk_documents(docs: List[Document], chunk_size: int = 1000, chunk_overlap:
     return splitter.split_documents(docs)
 
 
-def ingest_pipeline(data_dir: str = "./data/documents") -> Dict[str, Any]:
+def ingest_pipeline(data_dir: str = "./data/documents") -> dict[str, Any]:
     """Run full ingestion pipeline."""
     print("Loading documents...")
     docs = load_documents(data_dir)

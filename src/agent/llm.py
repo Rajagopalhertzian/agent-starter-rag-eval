@@ -1,6 +1,6 @@
 """OpenAI-compatible client for local Ollama and NVIDIA APIs."""
+
 import httpx
-from typing import List, Dict, Any, Optional
 from pydantic import BaseModel
 
 
@@ -11,9 +11,9 @@ class Message(BaseModel):
 
 class ChatCompletionRequest(BaseModel):
     model: str
-    messages: List[Message]
+    messages: list[Message]
     temperature: float = 0.1
-    max_tokens: Optional[int] = None
+    max_tokens: int | None = None
     stream: bool = False
 
 
@@ -25,7 +25,7 @@ class ChatCompletionChoice(BaseModel):
 
 class ChatCompletionResponse(BaseModel):
     id: str
-    choices: List[ChatCompletionChoice]
+    choices: list[ChatCompletionChoice]
     model: str
 
 
@@ -45,7 +45,7 @@ class OpenAICompatibleClient:
         self.model = model
         self.temperature = temperature
         self.timeout = timeout
-        self._client: Optional[httpx.AsyncClient] = None
+        self._client: httpx.AsyncClient | None = None
     
     @property
     def client(self) -> httpx.AsyncClient:
@@ -57,7 +57,7 @@ class OpenAICompatibleClient:
             )
         return self._client
     
-    async def complete(self, messages: List[Dict[str, str]]) -> str:
+    async def complete(self, messages: list[dict[str, str]]) -> str:
         """Complete chat and return content."""
         request = ChatCompletionRequest(
             model=self.model,
@@ -94,7 +94,7 @@ class EmbeddingsClient:
         self.api_key = api_key
         self.model = model
         self.timeout = timeout
-        self._client: Optional[httpx.AsyncClient] = None
+        self._client: httpx.AsyncClient | None = None
     
     @property
     def client(self) -> httpx.AsyncClient:
@@ -106,7 +106,7 @@ class EmbeddingsClient:
             )
         return self._client
     
-    async def embed(self, texts: List[str]) -> List[List[float]]:
+    async def embed(self, texts: list[str]) -> list[list[float]]:
         """Generate embeddings for texts."""
         response = await self.client.post(
             "/embeddings",

@@ -1,9 +1,8 @@
 """Test ingestion pipeline."""
-import pytest
 import tempfile
-import os
 from pathlib import Path
-from src.agent.ingest import load_documents, chunk_documents, ingest_pipeline
+
+from src.agent.ingest import chunk_documents, load_documents
 
 
 def test_load_documents():
@@ -36,4 +35,3 @@ def test_ingest_pipeline_dry_run():
     """Test ingest pipeline structure (without actual embeddings)."""
     # This just tests the function runs without error
     # Actual embedding requires Ollama running
-    pass

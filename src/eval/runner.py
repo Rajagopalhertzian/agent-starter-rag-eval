@@ -1,20 +1,19 @@
 """Evaluation harness with LLM-as-judge."""
 import asyncio
 import json
-from pathlib import Path
-from typing import List, Dict, Any, Optional
-from dataclasses import dataclass
+from typing import Any
+
 from pydantic import BaseModel
 
-from ..agent.llm import OpenAICompatibleClient
 from ..agent.config import settings
+from ..agent.llm import OpenAICompatibleClient
 
 
 class EvalCase(BaseModel):
     """Single evaluation case."""
     question: str
     expected_answer: str
-    expected_sources: Optional[List[str]] = None
+    expected_sources: list[str] | None = None
 
 
 class EvalResult(BaseModel):
@@ -109,12 +108,12 @@ class LLMJudge:
 
 
 async def run_evaluation(
-    test_cases: List[EvalCase],
+    test_cases: list[EvalCase],
     faithfulness_threshold: float = 3.0,
     relevance_threshold: float = 3.0,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Run evaluation suite."""
-    from ..agent.graph import rag_graph, RAGState
+    from ..agent.graph import RAGState, rag_graph
     
     judge = LLMJudge()
     results = []
@@ -166,7 +165,7 @@ async def run_evaluation(
     }
 
 
-def load_test_cases(path: str) -> List[EvalCase]:
+def load_test_cases(path: str) -> list[EvalCase]:
     """Load test cases from JSON file."""
     with open(path) as f:
         data = json.load(f)
