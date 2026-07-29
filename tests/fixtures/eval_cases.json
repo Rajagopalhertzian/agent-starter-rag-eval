@@ -1,0 +1,27 @@
+[
+  {
+    "question": "What is this project?",
+    "expected_answer": "A RAG agent starter kit with local LLMs, evals, and Docker deployment",
+    "expected_sources": ["README.md", "docs/architecture.md"]
+  },
+  {
+    "question": "What LLM providers are supported?",
+    "expected_answer": "NVIDIA Nemotron cloud API and local Ollama models",
+    "expected_sources": ["config/models.yaml", "src/agent/config.py"]
+  },
+  {
+    "question": "How do I run the project locally?",
+    "expected_answer": "Use docker compose up or run Ollama locally and start the FastAPI server",
+    "expected_sources": ["docker-compose.yml", "README.md"]
+  },
+  {
+    "question": "What vector database does this use?",
+    "expected_answer": "ChromaDB with local file persistence",
+    "expected_sources": ["src/agent/vectorstore.py", "config/models.yaml"]
+  },
+  {
+    "question": "How are embeddings generated?",
+    "expected_answer": "Using nomic-embed-text via Ollama locally",
+    "expected_sources": ["src/agent/embeddings.py", "config/models.yaml"]
+  }
+]

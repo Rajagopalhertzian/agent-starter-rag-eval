@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: rag-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build: .
+    container_name: rag-api
+    ports:
+      - "8000:8000"
+    environment:
+      - MODEL_API_BASE=http://ollama:11434/v1
+      - EMBEDDING_API_BASE=http://ollama:11434/v1
+      - CHROMA_PERSIST_DIR=/data/chroma
+      - DOCS_DIR=/data/docs
+    volumes:
+      - chroma_data:/data/chroma
+      - docs_data:/data/docs
+    depends_on:
+      ollama:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Optional: UI service
+  # ui:
+  #   build: .
+  #   container_name: rag-ui
+  #   ports:
+  #     - "3000:3000"
+  #   depends_on:
+  #     - api
+
+volumes:
+  ollama_data:
+  chroma_data:
+  docs_data:
