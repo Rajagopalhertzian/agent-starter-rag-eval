@@ -1,0 +1,12 @@
+models:
+  cloud:
+    provider: "nvidia"
+    model: "nvidia/nemotron-3-ultra"
+    api_base: "https://integrate.api.nvidia.com/v1"
+    api_key_env: "NVIDIA_API_KEY"
+  local:
+    provider: "ollama"
+    model: "qwen2.5-coder:7b"
+    api_base: "http://localhost:11434/v1"
+    api_key: "ollama"
+default: "local"

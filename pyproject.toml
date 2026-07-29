@@ -1,0 +1,43 @@
+[project]
+name = "agent-starter-rag-eval"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "chromadb>=1.5.9",
+    "fastapi>=0.141.1",
+    "langchain-chroma>=1.1.0",
+    "langgraph>=1.2.10",
+    "pydantic-settings>=2.14.2",
+    "python-dotenv>=1.2.2",
+    "pyyaml>=6.0.3",
+    "uvicorn>=0.52.0",
+]
+
+[dependency-groups]
+dev = [
+    "httpx>=0.28.1",
+    "mypy>=2.3.0",
+    "pre-commit>=4.6.1",
+    "pytest>=9.1.1",
+    "pytest-asyncio>=1.4.0",
+    "ruff>=0.16.0",
+]
+
+[project.scripts]
+dev = "uvicorn src.api.main:app --reload --host 0.0.0.0 --port 8000"
+test = "pytest tests/ -v"
+lint = "ruff check src/ tests/"
+format = "ruff format src/ tests/"
+typecheck = "mypy src/"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.mypy]
+python_version = "3.11"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
