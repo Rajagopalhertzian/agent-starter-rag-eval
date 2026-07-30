@@ -7,8 +7,8 @@ from langchain_core.embeddings import Embeddings
 from langchain_core.retrievers import BaseRetriever
 from langgraph.graph import END, StateGraph
 
-from .config import settings
-from .llm import EmbeddingsClient, OpenAICompatibleClient
+from src.agent.config import settings
+from src.agent.llm import EmbeddingsClient, OpenAICompatibleClient
 
 
 class RAGState(TypedDict):

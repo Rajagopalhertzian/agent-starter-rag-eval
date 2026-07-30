@@ -6,8 +6,8 @@ from langchain_chroma import Chroma
 from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 
-from .config import settings
-from .llm import EmbeddingsClient
+from src.agent.config import settings
+from src.agent.llm import EmbeddingsClient
 
 
 class OllamaEmbeddings:

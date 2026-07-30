@@ -80,6 +80,20 @@ class OpenAICompatibleClient:
             self._client = None
 
 
+# Backward compatibility aliases
+LLMClient = OpenAICompatibleClient
+
+
+def create_llm_client(settings) -> OpenAICompatibleClient:
+    """Factory to create LLM client from settings."""
+    return OpenAICompatibleClient(
+        api_base=settings.model_api_base,
+        api_key=settings.model_api_key,
+        model=settings.model_name,
+        temperature=settings.model_temperature,
+    )
+
+
 class EmbeddingsClient:
     """Client for embeddings API."""
     

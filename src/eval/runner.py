@@ -5,8 +5,9 @@ from typing import Any
 
 from pydantic import BaseModel
 
-from ..agent.config import settings
-from ..agent.llm import OpenAICompatibleClient
+from src.agent.config import settings
+from src.agent.graph import RAGState, rag_graph
+from src.agent.llm import OpenAICompatibleClient
 
 
 class EvalCase(BaseModel):
@@ -113,7 +114,6 @@ async def run_evaluation(
     relevance_threshold: float = 3.0,
 ) -> dict[str, Any]:
     """Run evaluation suite."""
-    from ..agent.graph import RAGState, rag_graph
     
     judge = LLMJudge()
     results = []

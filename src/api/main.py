@@ -6,9 +6,9 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
-from .agent.config import settings
-from .agent.graph import rag_graph
-from .agent.ingest import ingest_pipeline
+from src.agent.config import settings
+from src.agent.graph import rag_graph
+from src.agent.ingest import ingest_pipeline
 
 
 class QueryRequest(BaseModel):
